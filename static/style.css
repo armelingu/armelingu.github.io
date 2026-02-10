@@ -658,6 +658,42 @@ body::after {
   }
 }
 
+/* Mobile — header responsivo */
+@media (max-width: 520px) {
+  .cabecalho-portfolio {
+    flex-wrap: wrap;
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .cabecalho-textos {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .titulo-portfolio {
+    font-size: 18px;
+  }
+
+  .subtitulo-portfolio {
+    font-size: 11px;
+  }
+
+  .cabecalho-acoes {
+    gap: 8px;
+  }
+
+  .botao-cv {
+    font-size: 11px;
+    padding: 7px 12px;
+  }
+
+  .botao-idioma {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+}
+
 /*-----------------
  seção habilidades:
 -------------------
