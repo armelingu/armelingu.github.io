@@ -1,0 +1,465 @@
+<!-- autor: gustavo armelin -->
+<!-- data: 09/02/2026 -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============================
+       SEO — CORE
+  ============================= -->
+  <title>Gustavo Armelin — Desenvolvedor Backend Python | Flask, FastAPI, APIs REST</title>
+  <meta name="description" content="Portfólio de Gustavo Armelin (armelingu) — Desenvolvedor Backend Python em São Paulo. 2 anos de experiência com Flask, FastAPI, MySQL, Docker e deploy on-premise. Criou intranet para 300+ usuários na HBR Aviação. Aberto a novas oportunidades." />
+  <meta name="author" content="Gustavo Armelin" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <meta name="theme-color" content="#0b0f14" />
+  <!-- TODO PENDENTE: Trocar SEU_DOMINIO_AQUI pela URL real quando publicar -->
+  <link rel="canonical" href="https://SEU_DOMINIO_AQUI/" />
+
+  <!-- ============================
+       SEO — OPEN GRAPH (LinkedIn, WhatsApp, Facebook)
+       PENDENTE: Trocar SEU_DOMINIO_AQUI + criar og-image.png (1200x630) na pasta static/
+  ============================= -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="armelingu@dev" />
+  <meta property="og:title" content="Gustavo Armelin — Desenvolvedor Backend Python" />
+  <meta property="og:description" content="Desenvolvedor Backend Python com 2 anos de experiência. Flask, FastAPI, MySQL, Docker. Intranet para 300+ usuários. São Paulo, Brasil." />
+  <meta property="og:url" content="https://SEU_DOMINIO_AQUI/" />
+  <meta property="og:image" content="https://SEU_DOMINIO_AQUI/static/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Portfólio de Gustavo Armelin — Desenvolvedor Backend" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <!-- ============================
+       SEO — TWITTER CARD
+       PENDENTE: Trocar SEU_DOMINIO_AQUI pela URL real
+  ============================= -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Gustavo Armelin — Desenvolvedor Backend Python" />
+  <meta name="twitter:description" content="Desenvolvedor Backend Python com 2 anos de experiência. Flask, FastAPI, MySQL, Docker. São Paulo, Brasil." />
+  <meta name="twitter:image" content="https://SEU_DOMINIO_AQUI/static/og-image.png" />
+  <meta name="twitter:image:alt" content="Portfólio de Gustavo Armelin — Desenvolvedor Backend" />
+
+  <!-- ============================
+       SEO — JSON-LD STRUCTURED DATA (Schema.org)
+       Permite rich snippets no Google: foto, cargo, empresa, skills
+  ============================= -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "armelingu@dev",
+        "url": "https://SEU_DOMINIO_AQUI/",
+        "description": "Portfólio de Gustavo Armelin — Desenvolvedor Backend"
+      },
+      {
+        "@type": "ProfilePage",
+        "mainEntity": {
+          "@type": "Person",
+          "name": "Gustavo Armelin",
+          "alternateName": "armelingu",
+          "jobTitle": "Desenvolvedor Backend",
+          "url": "https://SEU_DOMINIO_AQUI/",
+          "email": "armelingu@gmail.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "São Paulo",
+            "addressCountry": "BR"
+          },
+          "sameAs": [
+            "https://github.com/armelingu",
+            "https://linkedin.com/in/gustavoarmelin"
+          ],
+          "knowsAbout": [
+            "Python", "Flask", "FastAPI", "REST APIs", "WebSocket",
+            "MySQL", "PostgreSQL", "Redis", "Docker", "Linux",
+            "Apache", "Systemd", "Deploy on-premise", "Jinja2"
+          ],
+          "worksFor": {
+            "@type": "Organization",
+            "name": "HBR Aviação"
+          }
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ============================
+       ASSETS
+  ============================= -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0f14'/%3E%3Ctext x='4' y='23' font-family='monospace' font-size='20' font-weight='bold' fill='%23ffd14a'%3E%3E_%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" />
+  <link rel="stylesheet" href="./static/style.css" />
+</head>
+<body>
+  <div class="pagina-portfolio">
+    <!-- elemento 01: layout -->
+    <header class="cabecalho-portfolio">
+      <div class="cabecalho-textos">
+        <h1 class="titulo-portfolio">armelingu@dev</h1>
+        <p class="subtitulo-portfolio" data-i18n="header.subtitle">Desenvolvedor Backend</p>
+      </div>
+      <div class="cabecalho-acoes">
+        <!-- TODO: PENDENTE — Colocar o arquivo cv.pdf na pasta static/ -->
+        <a href="./static/cv.pdf" download class="botao-cv" data-i18n="header.cv">Baixar CV</a>
+        <button class="botao-idioma" id="btn-idioma" type="button" title="Switch to English">
+          <span class="idioma-ativo">PT</span><span class="idioma-separador">/</span><span class="idioma-inativo">EN</span>
+        </button>
+      </div>
+    </header>
+    <!-- elemento 02: corpo -->
+    <div class="corpo-portfolio">
+      <!-- elemento 2.1: menu lateral esquerdo -->
+      <aside class="menu-lateral" aria-label="Menu de seções">
+        <nav class="menu-navegacao" aria-label="Navegação do portfólio">
+          <button class="item-menu ativo" data-secao="sobre" type="button" aria-current="true" data-i18n="menu.sobre">Sobre Mim</button>
+          <button class="item-menu" data-secao="habilidades" type="button" data-i18n="menu.habilidades">Habilidades</button>
+          <button class="item-menu" data-secao="projetos" type="button" data-i18n="menu.projetos">Projetos</button>
+          <button class="item-menu" data-secao="experiencia" type="button" data-i18n="menu.experiencia">Experiência</button>
+          <button class="item-menu" data-secao="formacao" type="button" data-i18n="menu.formacao">Formação</button>
+          <button class="item-menu" data-secao="contato" type="button" data-i18n="menu.contato">Contato</button>
+        </nav>
+      </aside>
+      <!-- elemento 2.2: centro principal -->
+      <main class="conteudo-principal" role="main">
+        <!-- secao sobre mim -->
+        <section class="secao-conteudo secao-sobre" data-secao="sobre">
+          <h2 class="titulo-secao" data-i18n="sobre.titulo">Sobre Mim</h2>
+          <div class="texto-sobre">
+            <p data-i18n="sobre.p1">
+              Desenvolvedor backend com 2 anos de experiência construindo sistemas internos
+              que rodam em produção. Na HBR Aviação, criei uma intranet usada diariamente por
+              mais de 300 colaboradores, além de sistemas de gestão de ativos de TI, controle
+              predial e automações que eliminaram processos manuais.
+            </p>
+            <p data-i18n="sobre.p2">
+              Trabalho com Python (Flask, FastAPI), bancos relacionais (MySQL, PostgreSQL),
+              Redis, Docker e deploy on-premise com Linux, Apache e Systemd.
+            </p>
+          </div>
+          <div class="card-especialidades">
+            <h3 class="titulo-card" data-i18n="sobre.card_titulo">O que eu entrego</h3>
+            <ul class="lista-especialidades">
+              <li data-i18n="sobre.esp1">APIs REST em Python com Flask e FastAPI</li>
+              <li data-i18n="sobre.esp2">Sistemas web internos com autenticação e permissões</li>
+              <li data-i18n="sobre.esp3">Integrações com ERPs (Protheus) e sistemas legados</li>
+              <li data-i18n="sobre.esp4">Deploy on-premise com Docker, Apache e Systemd</li>
+              <li data-i18n="sobre.esp5">Automação de processos que antes eram manuais</li>
+            </ul>
+          </div>
+        </section>
+        <!-- secao habilidades -->
+        <section class="secao-conteudo" data-secao="habilidades">
+            <h2 class="titulo-secao" data-i18n="hab.titulo">Habilidades</h2>
+            <div class="grid-habilidades">
+                <div class="grupo-habilidades">
+                    <h3 class="titulo-grupo">Backend</h3>
+                    <ul class="lista-habilidades">
+                        <li data-i18n="hab.b1">Python com Flask e FastAPI</li>
+                        <li data-i18n="hab.b2">Arquitetura de APIs RESTful</li>
+                        <li data-i18n="hab.b3">Sistemas em tempo real com WebSocket</li>
+                    </ul>
+                </div>
+                <div class="grupo-habilidades">
+                    <h3 class="titulo-grupo" data-i18n="hab.banco">Banco de Dados</h3>
+                    <ul class="lista-habilidades">
+                        <li data-i18n="hab.db1">Relacionais: MySQL, PostgreSQL, SQLite</li>
+                        <li data-i18n="hab.db2">Redis para cache, mensageria e estado</li>
+                        <li data-i18n="hab.db3">Modelagem relacional e normalização</li>
+                    </ul>
+                </div>
+                <div class="grupo-habilidades">
+                    <h3 class="titulo-grupo" data-i18n="hab.infra">Infra & Operações</h3>
+                    <ul class="lista-habilidades">
+                        <li data-i18n="hab.i1">Docker e Docker Compose</li>
+                        <li data-i18n="hab.i2">Linux (Ubuntu / Debian)</li>
+                        <li data-i18n="hab.i3">Gerenciamento com Systemd</li>
+                        <li>Git / GitHub</li>
+                        <li>Deploy on-premise</li>
+                    </ul>
+                </div>
+                <div class="grupo-habilidades">
+                    <h3 class="titulo-grupo" data-i18n="hab.frontend">Frontend & Integrações</h3>
+                    <ul class="lista-habilidades">
+                        <li>HTML5, CSS3, JavaScript</li>
+                        <li data-i18n="hab.f1">Templates server-side com Jinja2</li>
+                        <li data-i18n="hab.f2">Integração com ERPs corporativos</li>
+                        <li data-i18n="hab.f3">Orquestração de APIs externas</li>
+                    </ul>
+                </div>
+                <!-- <div class="grupo-habilidades">
+                    <h3 class="titulo-grupo" data-i18n="hab.ia">Dev com IA</h3>
+                    <ul class="lista-habilidades">
+                        <li>Claude (Opus / Sonnet)</li>
+                        <li>Cursor AI</li>
+                        <li>GitHub Copilot</li>
+                        <li data-i18n="hab.ia_prompt">Prompt Engineering</li>
+                        <li data-i18n="hab.ia_code">Code Review com IA</li>
+                    </ul>
+                </div> -->
+            </div>
+        </section>
+        <!-- secao projetos -->
+        <section class="secao-conteudo" data-secao="projetos">
+            <h2 class="titulo-secao" data-i18n="proj.titulo">Projetos</h2>
+            <div class="grid-projetos">
+                <!--projeto 01 -->
+                <article class="card-projeto">
+                    <header class="cabecalho-projeto">
+                        <h3 class="titulo-projeto">Portal TI Manager</h3>
+                        <span class="tag-projeto" data-i18n="proj.tag_prod">Produção</span>
+                    </header>
+                    <p class="descricao-projeto" data-i18n="proj.desc1">
+                        Sistema web para cadastro, gestão e monitoramento de ativos de TI.
+                        Desenvolvido em Flask com deploy on-premise via Apache e Systemd.
+                        Usado internamente na HBR Aviação.
+                    </p>
+                    <ul class="stack-projeto">
+                        <li>Python</li>
+                        <li>Flask</li>
+                        <li>MySQL</li>
+                        <li>Apache</li>
+                        <li>Systemd</li>
+                    </ul>
+                    <div class="acoes-projetos">
+                        <a href="https://github.com/armelingu/Portal-TI-Manager" target="_blank" class="link-projeto">GitHub</a>
+                    </div>
+                </article>
+                <!--projeto 02 -->
+                <article class="card-projeto">
+                    <header class="cabecalho-projeto">
+                        <h3 class="titulo-projeto">Controle Predial HBR</h3>
+                        <span class="tag-projeto" data-i18n="proj.tag_prod">Produção</span>
+                    </header>
+                    <p class="descricao-projeto" data-i18n="proj.desc2">
+                        Sistema de gestão completa de estoque de materiais prediais.
+                        Controle de entradas, saídas, fornecedores e relatórios
+                        para a equipe de facilities da HBR Aviação.
+                    </p>
+                    <ul class="stack-projeto">
+                        <li>Python</li>
+                        <li>Flask</li>
+                        <li>MySQL</li>
+                        <li>HTML/CSS</li>
+                        <li>JavaScript</li>
+                    </ul>
+                    <div class="acoes-projetos">
+                        <a href="https://github.com/armelingu/controle-predial-hbr" target="_blank" class="link-projeto">GitHub</a>
+                    </div>
+                </article>
+                <!--projeto 03 -->
+                <article class="card-projeto">
+                    <header class="cabecalho-projeto">
+                        <h3 class="titulo-projeto">SaleSys</h3>
+                        <span class="tag-projeto" data-i18n="proj.tag_pessoal">Pessoal</span>
+                    </header>
+                    <p class="descricao-projeto" data-i18n="proj.desc3">
+                        Sistema de pagamentos com controle de vendas, clientes
+                        e transações. Projeto pessoal para praticar arquitetura
+                        de aplicações financeiras.
+                    </p>
+                    <ul class="stack-projeto">
+                        <li>Python</li>
+                        <li>Flask</li>
+                        <li>PostgreSQL</li>
+                        <li>Docker</li>
+                    </ul>
+                    <div class="acoes-projetos">
+                        <a href="https://github.com/armelingu/salesys" target="_blank" class="link-projeto">GitHub</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <!-- secao experiencia -->
+        <section class="secao-conteudo" data-secao="experiencia">
+            <h2 class="titulo-secao" data-i18n="exp.titulo">Experiência</h2>
+            <div class="linha-tempo">
+                <div class="item-experiencia">
+                    <div class="marcador-tempo"></div>
+                    <div class="conteudo-experiencia">
+                        <header class="cabecalho-experiencia">
+                            <h3 class="cargo-experiencia" data-i18n="exp.cargo">Desenvolvedor Backend</h3>
+                            <span class="periodo-experiencia" data-i18n="exp.periodo">2024 - Atual</span>
+                        </header>
+                        <span class="empresa-experiencia">HBR Aviação</span>
+                        <p class="descricao-experiencia" data-i18n="exp.desc">
+                            Responsável pelo desenvolvimento de sistemas internos usados em produção
+                            por mais de 300 colaboradores, desde a arquitetura até o deploy em
+                            servidores on-premise.
+                        </p>
+                        <ul class="atividades-experiencia">
+                            <li data-i18n="exp.ativ1">Construí a intranet da empresa do zero — usada por 300+ usuários diariamente</li>
+                            <li data-i18n="exp.ativ2">Desenvolvi o Portal TI Manager para gestão e monitoramento de ativos de TI</li>
+                            <li data-i18n="exp.ativ3">Criei o sistema de Controle Predial para gestão de estoque de materiais</li>
+                            <li data-i18n="exp.ativ4">Implementei integrações com o ERP Protheus via APIs REST</li>
+                            <li data-i18n="exp.ativ5">Configurei deploys on-premise com Apache, Systemd e Docker</li>
+                        </ul>
+                        <ul class="stack-experiencia">
+                            <li>Python</li>
+                            <li>Flask</li>
+                            <li>MySQL</li>
+                            <li>Redis</li>
+                            <li>Docker</li>
+                            <li>Linux</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- secao formação -->
+        <section class="secao-conteudo" data-secao="formacao">
+            <h2 class="titulo-secao" data-i18n="form.titulo">Formação & Certificações</h2>
+            <!-- formação acadêmica -->
+            <h3 class="subtitulo-secao" data-i18n="form.academica">Formação Acadêmica</h3>
+            <div class="linha-tempo">
+                <div class="item-experiencia">
+                    <div class="marcador-tempo"></div>
+                    <div class="conteudo-experiencia">
+                        <header class="cabecalho-experiencia">
+                            <h3 class="cargo-experiencia" data-i18n="form.curso">Análise e Desenvolvimento de Sistemas</h3>
+                            <!-- <span class="periodo-experiencia" data-i18n="form.periodo">Em andamento</span> -->
+                        </header>
+                        <span class="empresa-experiencia" data-i18n="form.grau">Tecnólogo</span>
+                    </div>
+                </div>
+            </div>
+            <!-- certificações -->
+            <h3 class="subtitulo-secao" data-i18n="form.certs_titulo">Certificações</h3>
+            <div class="grid-certificacoes">
+                <div class="card-certificacao em-preparacao">
+                    <span class="titulo-certificacao">AWS Cloud Practitioner (CLF-C02)</span>
+                    <span class="emissor-certificacao" data-i18n="form.cert1_emissor">Amazon Web Services · Em preparação</span>
+                </div>
+                <div class="card-certificacao em-preparacao">
+                    <span class="titulo-certificacao">PCAP — Python Certified Associate Programmer</span>
+                    <span class="emissor-certificacao" data-i18n="form.cert2_emissor">Python Institute · Em preparação</span>
+                </div>
+                <div class="card-certificacao em-preparacao">
+                    <span class="titulo-certificacao">Docker Certified Associate (DCA)</span>
+                    <span class="emissor-certificacao" data-i18n="form.cert3_emissor">Docker · Em preparação</span>
+                </div>
+                <!-- Quando conquistar, troque "em-preparacao" por "conquistada" e atualize o texto:
+                <div class="card-certificacao conquistada">
+                    <span class="titulo-certificacao">AWS Cloud Practitioner (CLF-C02)</span>
+                    <span class="emissor-certificacao">Amazon Web Services · 2026</span>
+                </div>
+                -->
+            </div>
+        </section>
+        <!-- secao contato -->
+        <section class="secao-conteudo" data-secao="contato">
+            <h2 class="titulo-secao" data-i18n="contato.titulo">Contato</h2>
+            <p class="descricao-contato" data-i18n="contato.desc">
+                Quer conversar sobre projetos, freelas ou oportunidades?
+                Preencha o formulário abaixo!
+            </p>
+            <!-- overlay de sucesso pós-envio -->
+            <div class="envio-sucesso" hidden>
+                <div class="sucesso-icone">&gt;_</div>
+                <p class="sucesso-mensagem"></p>
+                <span class="sucesso-sub" data-i18n="contato.sucesso_sub">Responderei o mais breve possível.</span>
+            </div>
+            <form class="formulario-contato" action="https://formspree.io/f/xlgwdoqq" method="POST">
+                <div class="grupo-campo">
+                    <label for="nome" data-i18n="contato.label_nome">Nome</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        placeholder="Seu nome completo"
+                        data-i18n-placeholder="contato.ph_nome"
+                        required
+                    />
+                </div>
+                <div class="grupo-campo">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="seu@email.com"
+                        data-i18n-placeholder="contato.ph_email"
+                        required
+                    />
+                </div>
+                <div class="grupo-campo">
+                    <label for="assunto" data-i18n="contato.label_assunto">Assunto</label>
+                    <input 
+                        type="text"
+                        id="assunto"
+                        name="assunto"
+                        placeholder="Sobre o que você quer falar?"
+                        data-i18n-placeholder="contato.ph_assunto"
+                    />
+                </div>
+                <div class="grupo-campo">
+                    <label for="mensagem" data-i18n="contato.label_msg">Mensagem</label>
+                    <textarea 
+                        id="mensagem"
+                        name="mensagem"
+                        rows="5"
+                        placeholder="Escreva sua mensagem aqui..."
+                        data-i18n-placeholder="contato.ph_msg"
+                        required
+                    ></textarea>
+                </div>
+                <div class="acoes-formulario">
+                    <button type="submit" class="botao-enviar" data-i18n="contato.btn_enviar">
+                        Enviar mensagem
+                    </button>
+                </div>
+            </form>
+        </section>
+      </main>
+      <!-- elemento 03: painel lateral direito -->
+      <aside class="painel-contato" aria-label="Informações de contato">
+        <h3 class="titulo-contato" data-i18n="sidebar.titulo">Contato Rápido</h3>
+        <div class="grupo-contato">
+          <!-- EMAIL -->
+          <div class="item-contato">
+            <span class="rotulo-contato">Email</span>
+            <button class="valor-contato copiavel" data-copiar="armelingu@gmail.com" type="button">armelingu@gmail.com</button>
+          </div>
+          <!-- GITHUB -->
+          <div class="item-contato">
+            <span class="rotulo-contato">GitHub</span>
+            <a class="valor-contato" href="https://github.com/armelingu" target="_blank" rel="noopener noreferrer">
+              https://github.com/armelingu
+            </a>
+          </div>
+          <!-- LINKEDIN -->
+          <div class="item-contato">
+            <span class="rotulo-contato">LinkedIn</span>
+            <a class="valor-contato" href="https://linkedin.com/in/gustavoarmelin" target="_blank" rel="noopener noreferrer">
+              https://linkedin.com/in/gustavoarmelin
+            </a>
+          </div>
+          <!-- LOCALIZACAO -->
+          <div class="item-contato">
+            <span class="rotulo-contato" data-i18n="sidebar.localizacao">Localização</span>
+            <span class="valor-contato" data-i18n="sidebar.cidade">São Paulo, Brasil</span>
+          </div>
+        </div>
+        <div class="divisor-contato"></div>
+        <!-- STATUS -->
+        <div class="status-contato">
+          <span class="rotulo-contato" data-i18n="sidebar.disponibilidade">Disponibilidade</span>
+          <span class="valor-contato"><span class="indicador-disponivel"></span><span data-i18n="sidebar.status">Aberto a novas oportunidades</span></span>
+        </div>
+      </aside>
+    </div>
+    <footer class="rodape-portfolio">
+      criado por armelingu@dev &middot; 2026
+    </footer>
+  </div>
+  <script src="./static/script.js"></script>
+</body>
+</html>
