@@ -15,19 +15,18 @@
   <meta name="author" content="Gustavo Armelin" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
   <meta name="theme-color" content="#0b0f14" />
-  <!-- TODO PENDENTE: Trocar SEU_DOMINIO_AQUI pela URL real quando publicar -->
-  <link rel="canonical" href="https://SEU_DOMINIO_AQUI/" />
+  <link rel="canonical" href="https://armelingu.github.io/" />
 
   <!-- ============================
        SEO — OPEN GRAPH (LinkedIn, WhatsApp, Facebook)
-       PENDENTE: Trocar SEU_DOMINIO_AQUI + criar og-image.png (1200x630) na pasta static/
+       TODO: criar og-image.png (1200x630) na pasta static/
   ============================= -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="armelingu@dev" />
   <meta property="og:title" content="Gustavo Armelin — Desenvolvedor Backend Python" />
   <meta property="og:description" content="Desenvolvedor Backend Python com 2 anos de experiência. Flask, FastAPI, MySQL, Docker. Intranet para 300+ usuários. São Paulo, Brasil." />
-  <meta property="og:url" content="https://SEU_DOMINIO_AQUI/" />
-  <meta property="og:image" content="https://SEU_DOMINIO_AQUI/static/og-image.png" />
+  <meta property="og:url" content="https://armelingu.github.io/" />
+  <meta property="og:image" content="https://armelingu.github.io/static/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Portfólio de Gustavo Armelin — Desenvolvedor Backend" />
@@ -35,12 +34,12 @@
 
   <!-- ============================
        SEO — TWITTER CARD
-       PENDENTE: Trocar SEU_DOMINIO_AQUI pela URL real
+       TODO: criar og-image.png (1200x630) na pasta static/ para Twitter Card
   ============================= -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Gustavo Armelin — Desenvolvedor Backend Python" />
   <meta name="twitter:description" content="Desenvolvedor Backend Python com 2 anos de experiência. Flask, FastAPI, MySQL, Docker. São Paulo, Brasil." />
-  <meta name="twitter:image" content="https://SEU_DOMINIO_AQUI/static/og-image.png" />
+  <meta name="twitter:image" content="https://armelingu.github.io/static/og-image.png" />
   <meta name="twitter:image:alt" content="Portfólio de Gustavo Armelin — Desenvolvedor Backend" />
 
   <!-- ============================
@@ -54,7 +53,7 @@
       {
         "@type": "WebSite",
         "name": "armelingu@dev",
-        "url": "https://SEU_DOMINIO_AQUI/",
+        "url": "https://armelingu.github.io/",
         "description": "Portfólio de Gustavo Armelin — Desenvolvedor Backend"
       },
       {
@@ -64,7 +63,7 @@
           "name": "Gustavo Armelin",
           "alternateName": "armelingu",
           "jobTitle": "Desenvolvedor Backend",
-          "url": "https://SEU_DOMINIO_AQUI/",
+          "url": "https://armelingu.github.io/",
           "email": "armelingu@gmail.com",
           "address": {
             "@type": "PostalAddress",
@@ -97,7 +96,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@700&display=swap" />
-  <link rel="stylesheet" href="./static/style.css" />
+  <link rel="stylesheet" href="../static/style.css" />
 </head>
 <body>
   <div class="pagina-portfolio">
@@ -108,8 +107,8 @@
         <p class="subtitulo-portfolio" data-i18n="header.subtitle">Desenvolvedor Backend</p>
       </div>
       <div class="cabecalho-acoes">
-        <!-- TODO: PENDENTE — Colocar o arquivo cv.pdf na pasta static/ -->
-        <a href="./static/cv.pdf" download class="botao-cv" data-i18n="header.cv">Baixar CV</a>
+        <!-- TODO: Colocar o arquivo cv.pdf na pasta static/ -->
+        <a href="../static/cv.pdf" download class="botao-cv" data-i18n="header.cv">Baixar CV</a>
         <button class="botao-idioma" id="btn-idioma" type="button" title="Switch to English">
           <span class="idioma-ativo">PT</span><span class="idioma-separador">/</span><span class="idioma-inativo">EN</span>
         </button>
@@ -460,6 +459,6 @@
       criado por armelingu@dev &middot; 2026
     </footer>
   </div>
-  <script src="./static/script.js"></script>
+  <script src="../static/script.js"></script>
 </body>
 </html>
