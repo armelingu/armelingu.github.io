@@ -292,8 +292,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // experiencia
       "exp.titulo": "Experiência",
-      "exp.cargo": "Desenvolvedor Backend",
-      "exp.periodo": "2024 - Atual",
+      "exp.cargo1": "Desenvolvedor",
+      "exp.periodo1": "2024 - Atual",
+      "exp.cargo2": "Analista de Suporte 3",
+      "exp.periodo2": "2024",
+      "exp.cargo3": "Analista Helpdesk V",
+      "exp.periodo3": "2023 - 2024",
+      "exp.cargo4": "Estagiário",
+      "exp.periodo4": "2022 - 2023",
       "exp.desc": "Responsável pelo desenvolvimento de sistemas internos usados em produção por mais de 300 colaboradores, desde a arquitetura até o deploy em servidores on-premise.",
       "exp.ativ1": "Construí a intranet da empresa do zero — usada por 300+ usuários diariamente",
       "exp.ativ2": "Desenvolvi o Portal TI Manager para gestão e monitoramento de ativos de TI",
@@ -388,8 +394,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // experiencia
       "exp.titulo": "Experience",
-      "exp.cargo": "Backend Developer",
-      "exp.periodo": "2024 - Present",
+      "exp.cargo1": "Developer",
+      "exp.periodo1": "2024 - Present",
+      "exp.cargo2": "Support Analyst 3",
+      "exp.periodo2": "2024",
+      "exp.cargo3": "Helpdesk Analyst V",
+      "exp.periodo3": "2023 - 2024",
+      "exp.cargo4": "Intern",
+      "exp.periodo4": "2022 - 2023",
       "exp.desc": "Responsible for developing internal systems used in production by over 300 employees, from architecture to deployment on on-premise servers.",
       "exp.ativ1": "Built the company intranet from scratch — used by 300+ users daily",
       "exp.ativ2": "Developed Portal TI Manager for IT asset management and monitoring",

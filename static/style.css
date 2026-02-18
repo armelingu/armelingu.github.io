@@ -994,6 +994,26 @@ body::after {
   color: rgba(232, 238, 247, 0.9);
 }
 
+/* cargo anterior — marcador menor e mais discreto */
+.cargo-anterior .marcador-tempo {
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 209, 74, 0.45);
+  box-shadow: none;
+  left: -26px;
+  top: 6px;
+}
+
+.cargo-anterior .conteudo-experiencia {
+  padding: 12px 16px;
+}
+
+.cargo-anterior .cargo-experiencia {
+  font-size: 14px;
+  font-weight: 650;
+  color: rgba(232, 238, 247, 0.85);
+}
+
 /* =========================
    ANIMAÇÃO ENTRE SEÇÕES
 ========================= */
