@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Usei IA para escrever meu gateway de integração | armelingu.</title>
+<meta name="description" content="Bastidores de como acelerei a construção de um gateway JSON para XML/SOAP com um assistente de IA, e os três erros sutis que só peguei porque conhecia o domínio.">
+<meta name="theme-color" content="#FFF8EC">
+<link rel="canonical" href="https://armelingu.github.io/artigos/ia-gateway-integracao.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Usei IA para escrever meu gateway de integração">
+<meta property="og:description" content="Bastidores de como acelerei a construção de um gateway JSON para XML/SOAP com um assistente de IA, e os três erros sutis que só peguei porque conhecia o domínio.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<header>
+  <nav class="nav">
+    <a href="../index.html" class="mark">armelingu.</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#sobre">Sobre</a></li>
+      <li><a href="../index.html#experiencia">Experiência</a></li>
+      <li><a href="../index.html#projetos">Projetos</a></li>
+      <li><a href="../index.html#artigos">Artigos</a></li>
+      <li><a href="../index.html#contato">Contato</a></li>
+    </ul>
+    <a href="../Curriculo_Gustavo_Armelin.pdf" class="nav-cv" target="_blank">Currículo</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="../index.html#sobre">Sobre</a>
+    <a href="../index.html#experiencia">Experiência</a>
+    <a href="../index.html#projetos">Projetos</a>
+    <a href="../index.html#artigos">Artigos</a>
+    <a href="../index.html#contato">Contato</a>
+    <a href="../Curriculo_Gustavo_Armelin.pdf" target="_blank" rel="noopener">Currículo</a>
+  </div>
+</header>
+
+<section class="article-hero">
+  <div class="wrap">
+    <a href="../index.html#artigos" class="article-back">← Voltar aos artigos</a>
+    <div class="eyebrow">IA no desenvolvimento</div>
+    <h1>Usei IA para escrever meu gateway de integração. Aqui está o que teria dado errado se eu não revisasse linha por linha</h1>
+    <div class="article-meta">
+      <span>20 de agosto de 2026</span>
+      <span>7 min de leitura</span>
+    </div>
+  </div>
+</section>
+
+<article class="article-body">
+  <p>Num dos meus projetos, precisei construir um gateway que traduz chamadas REST/JSON modernas para o formato XML/SOAP que um ERP legado espera. É o tipo de trabalho que envolve muito boilerplate: parsing de XML, geração de envelope SOAP, mapeamento de campo por campo. Usei um assistente de IA para acelerar boa parte disso. Funcionou bem, mas não do jeito que a propaganda de "IA escreve seu código sozinha" sugere.</p>
+
+  <h2>Onde a IA acelerou de verdade</h2>
+  <p>Gerar o cliente SOAP inicial com uma biblioteca como <code>zeep</code>, escrever os testes repetitivos de serialização de cada campo, montar o esqueleto de validação de schema: tudo isso a IA fez rápido e bem. É trabalho mecânico, bem documentado publicamente, sem ambiguidade de negócio. Nessa parte, o ganho de velocidade foi real, provavelmente cortei uns dois dias de trabalho braçal.</p>
+
+  <h2>Os três erros que só peguei porque conhecia o domínio</h2>
+  <p>O problema aparece na parte que exige contexto que não está em nenhuma documentação pública. Três exemplos concretos:</p>
+
+  <h3>1. Formato de data</h3>
+  <p>A IA assumiu, sem perguntar, que o campo de data deveria ir em ISO 8601 (<code>2026-08-20</code>). O webservice legado espera <code>AAAAMMDD</code> sem separador. O código compilava, os testes unitários passavam (porque os testes também foram gerados com a mesma suposição errada), e só quebraria em produção com uma mensagem de erro genérica do lado do ERP.</p>
+
+  <h3>2. Exceção de timeout engolida</h3>
+  <p>No tratamento de erro, a IA gerou um bloco genérico de <code>try/except</code> que capturava qualquer exceção e retornava uma resposta de "sucesso parcial" para não quebrar o fluxo do chamador. Isso incluía timeouts de rede reais. Ou seja: uma falha de conexão de verdade seria reportada como sucesso. Esse é o tipo de bug que não aparece em teste, só em produção, silenciosamente, até alguém notar que dados sumiram.</p>
+
+  <h3>3. Paralelismo que o webservice não aguenta</h3>
+  <p>Pedi para otimizar a performance, e a sugestão foi paralelizar as chamadas SOAP com um pool de conexões. Parece razoável, é a otimização óbvia. O problema é que o webservice legado do outro lado processa uma fila internamente e trava com múltiplas conexões simultâneas do mesmo usuário. Isso teria causado esgotamento de conexão em produção, um efeito colateral que só faz sentido pra quem já leu (ou sofreu com) a documentação de limitação desse ERP especificamente.</p>
+
+  <div class="callout">
+    <span class="label">O padrão por trás dos três erros</span>
+    <p>Nenhum dos três é um "bug de código" no sentido tradicional. É código sintaticamente correto, bem estruturado, que passa em teste unitário e ainda assim está errado, porque a IA não tem (e não pode ter) o contexto de negócio específico de um sistema legado com trinta anos de decisões arbitrárias acumuladas.</p>
+  </div>
+
+  <h2>O que ficou comigo dessa experiência</h2>
+  <p>A conclusão não é "não use IA para escrever integrações". É que a habilidade que mais importa mudou de lugar. Antes, boa parte do valor estava em escrever o código. Hoje, está em saber exatamente onde revisar com desconfiança: nos pontos de contato com sistemas legados, no tratamento de erro, e em qualquer suposição implícita sobre formato de dado que ninguém documentou.</p>
+  <p>Uso IA para acelerar a parte mecânica todos os dias. Mas cada linha que toca uma regra de negócio específica do ERP, eu leio como se tivesse sido escrita por um estagiário talentoso que nunca trabalhou com aquele sistema: provavelmente está bem escrita, e ainda assim pode estar sutilmente errada.</p>
+
+  <div class="article-tags">
+    <span>IA</span><span>Integração de Sistemas</span><span>ERP</span><span>Python</span>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <a href="../index.html" class="mark">armelingu.</a>
+      <p>Build, integrate, scale. All days.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="stack-label">Navegação</div>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#experiencia">Experiência</a>
+        <a href="../index.html#projetos">Projetos</a>
+        <a href="../index.html#artigos">Artigos</a>
+        <a href="../index.html#contato">Contato</a>
+      </div>
+      <div class="footer-col">
+        <div class="stack-label">Social</div>
+        <a href="mailto:armelingu@gmail.com">E-mail</a>
+        <a href="https://github.com/armelingu" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/gustavoarmelin" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="../Curriculo_Gustavo_Armelin.pdf" target="_blank">Currículo</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Gustavo Armelin</span>
+    <a href="../index.html#top" class="back-top">Voltar ao topo ↑</a>
+  </div>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

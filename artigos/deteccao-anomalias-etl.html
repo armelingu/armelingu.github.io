@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detectando sync quebrado no ETL sem precisar de um LLM | armelingu.</title>
+<meta name="description" content="Nem toda solução de IA precisa ser um modelo de linguagem. Como um classificador estatístico simples ajudou a pegar falhas silenciosas num pipeline de ETL.">
+<meta name="theme-color" content="#FFF8EC">
+<link rel="canonical" href="https://armelingu.github.io/artigos/deteccao-anomalias-etl.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Detectando sync quebrado no ETL sem precisar de um LLM">
+<meta property="og:description" content="Como um classificador estatístico simples ajudou a pegar falhas silenciosas num pipeline de ETL.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<header>
+  <nav class="nav">
+    <a href="../index.html" class="mark">armelingu.</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#sobre">Sobre</a></li>
+      <li><a href="../index.html#experiencia">Experiência</a></li>
+      <li><a href="../index.html#projetos">Projetos</a></li>
+      <li><a href="../index.html#artigos">Artigos</a></li>
+      <li><a href="../index.html#contato">Contato</a></li>
+    </ul>
+    <a href="../Curriculo_Gustavo_Armelin.pdf" class="nav-cv" target="_blank">Currículo</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="../index.html#sobre">Sobre</a>
+    <a href="../index.html#experiencia">Experiência</a>
+    <a href="../index.html#projetos">Projetos</a>
+    <a href="../index.html#artigos">Artigos</a>
+    <a href="../index.html#contato">Contato</a>
+    <a href="../Curriculo_Gustavo_Armelin.pdf" target="_blank" rel="noopener">Currículo</a>
+  </div>
+</header>
+
+<section class="article-hero">
+  <div class="wrap">
+    <a href="../index.html#artigos" class="article-back">← Voltar aos artigos</a>
+    <div class="eyebrow">IA no desenvolvimento</div>
+    <h1>Detectando sync quebrado no ETL sem precisar de um LLM</h1>
+    <div class="article-meta">
+      <span>04 de setembro de 2026</span>
+      <span>5 min de leitura</span>
+    </div>
+  </div>
+</section>
+
+<article class="article-body">
+  <p>Um ETL que mantenho faz sincronização incremental, de hora em hora, de várias tabelas de um ERP. Um dia percebi um problema que não aparecia em nenhum log de erro: um sync "rodava com sucesso", sem exceção, mas trazia zero ou pouquíssimas mudanças quando deveria trazer centenas. Não era uma falha, era uma <strong>falha silenciosa</strong>, o tipo mais perigoso, porque tudo parece estar funcionando.</p>
+
+  <h2>O problema com alertas baseados em erro</h2>
+  <p>Meu monitoramento original só disparava alerta em exceção: timeout, erro de conexão, erro de schema. Isso pega os problemas óbvios. Não pega o caso em que a query roda, retorna um resultado tecnicamente válido, mas incompleto, por exemplo, por causa de um filtro de data mal calculado, ou uma conexão degradada que devolve resposta parcial sem erro explícito.</p>
+
+  <h2>A solução: baseline estatístico simples</h2>
+  <p>Antes de pensar em qualquer modelo sofisticado, tentei a solução mais simples possível: guardar o histórico do número de mutações (linhas inseridas ou atualizadas) por sync e por tabela, e comparar cada execução nova com a média e o desvio padrão das últimas semanas. Se o valor do dia estiver muito fora do esperado (um z-score alto), o sync é marcado como suspeito e dispara um alerta pra eu revisar.</p>
+
+  <pre><code>media = historico.media()
+desvio = historico.desvio_padrao()
+z_score = (mutacoes_hoje - media) / desvio if desvio > 0 else 0
+
+if abs(z_score) > 3:
+    alertar("sync suspeito", tabela, mutacoes_hoje, media)</code></pre>
+
+  <p>Isso não é machine learning no sentido chamativo do termo. É estatística básica de um jeito bem aplicado. E resolveu a maior parte do problema: comecei a pegar syncs "silenciosamente quebrados" no mesmo dia, em vez de descobrir semanas depois que um relatório financeiro estava com dado desatualizado.</p>
+
+  <h2>Quando isso não é suficiente</h2>
+  <p>A primeira versão gerou alguns falsos positivos por causa de sazonalidade: fechamento de mês tem naturalmente muito mais movimento financeiro que um dia qualquer, e isso disparava alerta sem ser um problema real. Precisei ajustar o baseline pra considerar o dia do mês, não só a média geral, comparando cada dia com o mesmo período em ciclos anteriores em vez de com a média de todos os dias misturados.</p>
+
+  <div class="callout">
+    <span class="label">O ponto principal</span>
+    <p>Nem todo problema que parece pedir "IA" precisa de um modelo de linguagem ou de machine learning complexo. Um z-score bem calibrado, com o contexto certo do domínio (sazonalidade, volume esperado por tabela), resolveu com muito menos complexidade, mais velocidade e, principalmente, mais fácil de explicar quando alguém pergunta "por que esse alerta disparou".</p>
+  </div>
+
+  <h2>Conclusão</h2>
+  <p>Não descarto usar um modelo mais sofisticado no futuro, se o padrão de anomalia ficar mais complexo do que uma comparação estatística simples consegue capturar. Mas a lição que fica é: antes de reservar a solução mais complexa, vale testar a mais simples que resolve o problema real. Na maior parte das vezes, ela é mais barata de manter e mais fácil de confiar.</p>
+
+  <div class="article-tags">
+    <span>IA</span><span>ETL</span><span>Observabilidade</span><span>Python</span>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <a href="../index.html" class="mark">armelingu.</a>
+      <p>Build, integrate, scale. All days.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="stack-label">Navegação</div>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#experiencia">Experiência</a>
+        <a href="../index.html#projetos">Projetos</a>
+        <a href="../index.html#artigos">Artigos</a>
+        <a href="../index.html#contato">Contato</a>
+      </div>
+      <div class="footer-col">
+        <div class="stack-label">Social</div>
+        <a href="mailto:armelingu@gmail.com">E-mail</a>
+        <a href="https://github.com/armelingu" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/gustavoarmelin" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="../Curriculo_Gustavo_Armelin.pdf" target="_blank">Currículo</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Gustavo Armelin</span>
+    <a href="../index.html#top" class="back-top">Voltar ao topo ↑</a>
+  </div>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>

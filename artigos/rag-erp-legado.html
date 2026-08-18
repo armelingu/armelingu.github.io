@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG pra ERP legado: fazendo o Protheus responder sobre si mesmo | armelingu.</title>
+<meta name="description" content="Um experimento pessoal: montar um assistente com RAG que responde perguntas sobre os campos e tabelas do TOTVS Protheus, um dos ERPs com a documentação mais espalhada que existe.">
+<meta name="theme-color" content="#FFF8EC">
+<link rel="canonical" href="https://armelingu.github.io/artigos/rag-erp-legado.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="RAG pra ERP legado: fazendo o Protheus responder sobre si mesmo">
+<meta property="og:description" content="Um experimento pessoal: montar um assistente com RAG que responde perguntas sobre os campos e tabelas do TOTVS Protheus.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<header>
+  <nav class="nav">
+    <a href="../index.html" class="mark">armelingu.</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#sobre">Sobre</a></li>
+      <li><a href="../index.html#experiencia">Experiência</a></li>
+      <li><a href="../index.html#projetos">Projetos</a></li>
+      <li><a href="../index.html#artigos">Artigos</a></li>
+      <li><a href="../index.html#contato">Contato</a></li>
+    </ul>
+    <a href="../Curriculo_Gustavo_Armelin.pdf" class="nav-cv" target="_blank">Currículo</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="../index.html#sobre">Sobre</a>
+    <a href="../index.html#experiencia">Experiência</a>
+    <a href="../index.html#projetos">Projetos</a>
+    <a href="../index.html#artigos">Artigos</a>
+    <a href="../index.html#contato">Contato</a>
+    <a href="../Curriculo_Gustavo_Armelin.pdf" target="_blank" rel="noopener">Currículo</a>
+  </div>
+</header>
+
+<section class="article-hero">
+  <div class="wrap">
+    <a href="../index.html#artigos" class="article-back">← Voltar aos artigos</a>
+    <div class="eyebrow">IA no desenvolvimento</div>
+    <h1>RAG pra ERP legado: fazendo o Protheus responder sobre si mesmo</h1>
+    <div class="article-meta">
+      <span>28 de agosto de 2026</span>
+      <span>6 min de leitura</span>
+    </div>
+  </div>
+</section>
+
+<article class="article-body">
+  <p>Quem já trabalhou com TOTVS Protheus conhece o problema: o dicionário de campos (a tabela <code>SX3</code>) tem milhares de entradas com nomes curtos e pouco intuitivos, tipo <code>C7_ITEMCTA</code> ou <code>E2_VENCREA</code>. A documentação oficial existe, mas está espalhada, e cada empresa customiza campos próprios por cima. Na prática, a forma mais comum de descobrir o que um campo significa é perguntar pra alguém mais experiente. Isso não escala. Resolvi tentar resolver isso com um assistente baseado em RAG (Retrieval-Augmented Generation) como projeto pessoal.</p>
+
+  <h2>A ideia</h2>
+  <p>RAG, resumindo, é buscar os trechos de texto mais relevantes pra uma pergunta e dar isso como contexto pra um modelo de linguagem responder, em vez de depender só do que o modelo "sabe" de treino. Montei um índice com três fontes:</p>
+  <ul>
+    <li>Extração da <code>SX3</code> (nome do campo, descrição, tabela, tipo, tamanho)</li>
+    <li>Estrutura de relacionamento entre as tabelas mais usadas (SC7, SD1, SE1, SE2, SB2)</li>
+    <li>Algumas anotações próprias de integração, tipo "esse campo só é preenchido quando a filial é X"</li>
+  </ul>
+  <p>Cada campo virou um "documento" pequeno, com nome, tabela, descrição e observações. Gerei os embeddings e coloquei num índice vetorial simples.</p>
+
+  <h2>O que funcionou bem</h2>
+  <p>Perguntas diretas, do tipo "o que é o campo C7_ITEMCTA" ou "em qual tabela fica o vencimento de um título a pagar", tiveram respostas rápidas e corretas. Isso já economiza um bom tempo de ir atrás de alguém ou vasculhar documentação antiga. Também funcionou bem pra perguntas do tipo "quais campos eu preciso pra montar um relatório de X", desde que a resposta estivesse contida em um único "documento" indexado.</p>
+
+  <h2>Onde o RAG simples não foi suficiente</h2>
+  <p>O problema apareceu em perguntas que exigem juntar informação de mais de uma tabela, tipo "como eu ligo um pedido de compra ao centro de custo dele". A resposta certa depende de saber que <code>SC7</code> se relaciona com <code>CTT010</code> através do campo <code>C7_CC</code>, uma informação que não estava explícita em nenhum texto isolado, só implícita na estrutura relacional. RAG puro (busca por similaridade de texto) devolvia trechos soltos sobre cada tabela separadamente, sem conectar os pontos, e o modelo às vezes inventava uma relação plausível, mas errada.</p>
+
+  <div class="callout">
+    <span class="label">O que aprendi com isso</span>
+    <p>RAG funciona bem quando a resposta cabe em um documento. Quando a resposta depende de raciocínio sobre estrutura (joins, hierarquia, regra condicional), busca por similaridade de texto não é suficiente, é preciso uma camada estruturada por cima (um grafo de relacionamento entre tabelas, por exemplo) que o modelo consulte antes de responder.</p>
+  </div>
+
+  <h2>Próximo passo</h2>
+  <p>A ideia que quero testar agora é dar ao assistente acesso de leitura direto ao schema do banco (introspection), em vez de depender só de documentação estática que fica desatualizada. Se funcionar, o assistente deixa de responder "o que sei sobre esse campo" pra responder "o que existe de fato nesse banco agora", o que resolve boa parte do problema de documentação defasada.</p>
+
+  <div class="article-tags">
+    <span>IA</span><span>RAG</span><span>ERP</span><span>TOTVS Protheus</span>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <a href="../index.html" class="mark">armelingu.</a>
+      <p>Build, integrate, scale. All days.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="stack-label">Navegação</div>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#experiencia">Experiência</a>
+        <a href="../index.html#projetos">Projetos</a>
+        <a href="../index.html#artigos">Artigos</a>
+        <a href="../index.html#contato">Contato</a>
+      </div>
+      <div class="footer-col">
+        <div class="stack-label">Social</div>
+        <a href="mailto:armelingu@gmail.com">E-mail</a>
+        <a href="https://github.com/armelingu" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/gustavoarmelin" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="../Curriculo_Gustavo_Armelin.pdf" target="_blank">Currículo</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Gustavo Armelin</span>
+    <a href="../index.html#top" class="back-top">Voltar ao topo ↑</a>
+  </div>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
