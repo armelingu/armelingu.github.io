@@ -195,6 +195,9 @@ section.body-section:last-of-type { border-bottom: none; }
 .timeline-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; margin-bottom: 26px; }
 .timeline-head h3 { font-size: 21px; font-weight: 700; }
 .timeline-head .company { font-size: 14px; font-weight: 600; color: var(--coral); }
+.timeline-head .trajectory {
+  margin: 10px 0 0; font-size: 13px; font-weight: 500; color: var(--ink); opacity: 0.72;
+}
 .timeline-head .period {
   font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; background: var(--yellow);
   border: 2px solid var(--ink); padding: 5px 12px; border-radius: 100px; color: var(--ink);
