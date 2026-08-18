@@ -90,19 +90,19 @@ document.querySelectorAll('.counter').forEach((el) => counterObserver.observe(el
 // Exemplo: { date: "2026-09-01", title: "Como construí um gateway JSON→SOAP", excerpt: "Bastidores da integração.", url: "artigos/gateway.html" }
 const artigos = [
   {
-    date: "2026-08-20",
+    date: "2026-08-04",
     title: "Usei IA para escrever meu gateway de integração",
     excerpt: "Os três erros sutis que a IA cometeu, e que só peguei porque conhecia o domínio do ERP legado.",
     url: "artigos/ia-gateway-integracao.html",
   },
   {
-    date: "2026-08-28",
+    date: "2026-08-11",
     title: "RAG pra ERP legado: fazendo o Protheus responder sobre si mesmo",
     excerpt: "Um experimento pessoal com RAG para consultar o dicionário de campos de um ERP TOTVS Protheus em linguagem natural.",
     url: "artigos/rag-erp-legado.html",
   },
   {
-    date: "2026-09-04",
+    date: "2026-08-18",
     title: "Detectando sync quebrado no ETL sem precisar de um LLM",
     excerpt: "Como um classificador estatístico simples (nada de machine learning chamativo) pegou falhas silenciosas num pipeline de dados.",
     url: "artigos/deteccao-anomalias-etl.html",
