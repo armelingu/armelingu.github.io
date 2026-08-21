@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O retry salvou o job e duplicou o pedido | armelingu.</title>
+<meta name="description" content="Timeout no SOAP não diz se o ERP gravou ou não. Sem chave de idempotência, o retry que parece salvação vira pedido duplicado.">
+<meta name="theme-color" content="#FFF8EC">
+<link rel="canonical" href="https://armelingu.github.io/artigos/retry-idempotencia-soap.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="armelingu.">
+<meta property="og:url" content="https://armelingu.github.io/artigos/retry-idempotencia-soap.html">
+<meta property="og:title" content="O retry salvou o job e duplicou o pedido">
+<meta property="og:description" content="Timeout no SOAP não diz se o ERP gravou ou não. Sem chave de idempotência, o retry que parece salvação vira pedido duplicado.">
+<meta property="og:image" content="https://armelingu.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="article:published_time" content="2026-08-21">
+<meta property="article:author" content="Gustavo Armelin">
+<meta name="author" content="Gustavo Armelin">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="O retry salvou o job e duplicou o pedido">
+<meta name="twitter:description" content="Timeout no SOAP não diz se o ERP gravou ou não. Sem chave de idempotência, o retry que parece salvação vira pedido duplicado.">
+<meta name="twitter:image" content="https://armelingu.github.io/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "O retry salvou o job e duplicou o pedido",
+  "description": "Timeout no SOAP não diz se o ERP gravou ou não. Sem chave de idempotência, o retry que parece salvação vira pedido duplicado.",
+  "datePublished": "2026-08-21",
+  "dateModified": "2026-08-21",
+  "inLanguage": "pt-BR",
+  "url": "https://armelingu.github.io/artigos/retry-idempotencia-soap.html",
+  "image": "https://armelingu.github.io/og.png",
+  "author": {
+    "@type": "Person",
+    "name": "Gustavo Armelin",
+    "url": "https://armelingu.github.io/"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Gustavo Armelin",
+    "url": "https://armelingu.github.io/"
+  },
+  "mainEntityOfPage": "https://armelingu.github.io/artigos/retry-idempotencia-soap.html"
+}
+</script>
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar"></div>
+
+<header>
+  <nav class="nav">
+    <a href="../index.html" class="mark">armelingu.</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#sobre">Sobre</a></li>
+      <li><a href="../index.html#experiencia">Experiência</a></li>
+      <li><a href="../index.html#projetos">Projetos</a></li>
+      <li><a href="../index.html#artigos">Artigos</a></li>
+      <li><a href="../index.html#contato">Contato</a></li>
+    </ul>
+    <a href="../Curriculo_Gustavo_Armelin.pdf" class="nav-cv" target="_blank">Currículo</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="../index.html#sobre">Sobre</a>
+    <a href="../index.html#experiencia">Experiência</a>
+    <a href="../index.html#projetos">Projetos</a>
+    <a href="../index.html#artigos">Artigos</a>
+    <a href="../index.html#contato">Contato</a>
+    <a href="../Curriculo_Gustavo_Armelin.pdf" target="_blank" rel="noopener">Currículo</a>
+  </div>
+</header>
+
+<main>
+<section class="article-hero">
+  <div class="wrap">
+    <a href="../index.html#artigos" class="article-back">← Voltar aos artigos</a>
+    <div class="eyebrow">Integração de sistemas</div>
+    <h1>O retry salvou o job e duplicou o pedido</h1>
+    <div class="article-meta">
+      <span>21 de agosto de 2026</span>
+      <span>6 min de leitura</span>
+    </div>
+  </div>
+</section>
+
+<article class="article-body">
+  <p>Integração com ERP legado tem um tipo de falha que eu odeio: o timeout. Não é um “não”. Também não é um “sim”. É o webservice SOAP que ficou calado no meio do caminho, e você fica sem saber se o Protheus gravou o pedido de venda ou se a requisição morreu antes de chegar na transação.</p>
+  <p>A reação automática, minha inclusive, é colocar retry. Erro transitório, tenta de novo, o job fica verde. Até o dia em que o financeiro pergunta por que a mesma peça saiu em dois pedidos.</p>
+
+  <h2>O que o timeout esconde</h2>
+  <p>Quando a gente chama um webservice de inclusão e toma timeout, existem pelo menos três mundos possíveis:</p>
+  <ul>
+    <li>A rede caiu antes do ERP processar. Tentar de novo está certo.</li>
+    <li>O ERP processou, commitou, e a resposta se perdeu no caminho de volta. Tentar de novo cria um segundo pedido.</li>
+    <li>O ERP ainda está processando. A segunda chamada entra em cima da primeira e você ganha corrida, lock ou, de novo, duplicata.</li>
+  </ul>
+  <p>Do lado do cliente, os três parecem a mesma exceção. <code>Timeout</code>, <code>ConnectionError</code>, envelope SOAP pela metade. O log do job não distingue “não chegou” de “chegou e eu não ouvi a resposta”.</p>
+
+  <h2>Retry sem memória é otimismo</h2>
+  <p>Retry faz sentido para erro de rede, instabilidade curta, aquele webservice que cospe 500 uma vez e na segunda vai. Eu uso. Em lote de pedido de venda, com classificação fiscal no meio, eu só uso se a operação tiver uma identidade que o ERP (ou eu) consiga reconhecer na segunda tentativa.</p>
+  <p>Sem isso, o job “se recupera” e o negócio fica sujo. Dois pedidos, duas classificações, risco de NF duplicada no fluxo seguinte. O pior: o monitoramento fica feliz. Sucesso HTTP. Fila vazia. Quem reclama é gente, dias depois.</p>
+
+  <div class="callout">
+    <span class="label">A regra que eu carrego agora</span>
+    <p>Se a operação cria alguma coisa no ERP, timeout não é “falhou”. É “não sei”. E “não sei” não se resolve com a mesma chamada crua de novo.</p>
+  </div>
+
+  <h2>O que eu passei a gravar</h2>
+  <p>Antes de falar com o SOAP, eu gero uma chave de idempotência do lado de cá: um id estável do pedido de origem (sistema de manutenção, item, operação). Essa chave vai junto no payload quando o webservice aceita um campo nosso, ou fica numa tabela de controle se o legado não tem onde guardar.</p>
+  <p>Na segunda tentativa o fluxo é outro:</p>
+  <ol>
+    <li>Olho se essa chave já tem um número de pedido no Protheus.</li>
+    <li>Se tem, não incluo de novo. Devolvo o que já existe e sigo a vida.</li>
+    <li>Se não tem, aí sim chamo a inclusão. Com lock distribuído na chave, para dois workers não dispararem o mesmo insert no mesmo segundo.</li>
+  </ol>
+  <p>O lock não é firula. Sem ele, dois retries paralelos passam os dois na consulta “ainda não existe” e o ERP ganha dois inserts. Idempotência sem exclusão mútua é corrida. Eu já vi.</p>
+
+  <h2>Retry do que é transitório. Não do que é negócio</h2>
+  <p>Eu ainda reprocesso timeout, reset de conexão, 503. Não reprocesso validação fiscal, cliente bloqueado, item sem estoque. Isso não é intermitência, é o ERP falando não. Empurrar de novo só enche log e, em alguns webservices, ainda cria rascunho torto.</p>
+  <p>Outra coisa chata: o SOAP legado costuma ser serial. Um usuário, uma fila. Retry agressivo em paralelo, além de duplicar, derruba o próprio canal. Aqui o retry é curto, com espera, e um de cada vez por chave.</p>
+
+  <h2>O que ficou</h2>
+  <p>Retry é ferramenta boa. Sem chave e sem lock, é um jeito elegante de mentir para o dashboard. O job ficou verde. O pedido ficou duas vezes.</p>
+  <p>Hoje, quando alguém pede “só coloca um retry aí”, eu pergunto primeiro: se essa chamada passar duas vezes, o ERP cria duas coisas? Se a resposta for sim, a conversa muda de biblioteca de retry para desenho de identidade. O resto é detalhe de implementação.</p>
+
+  <div class="article-tags">
+    <span>Integração</span><span>SOAP</span><span>ERP</span><span>Python</span>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <a href="../index.html" class="mark">armelingu.</a>
+      <p>Build, integrate, scale. All days.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="stack-label">Navegação</div>
+        <a href="../index.html#sobre">Sobre</a>
+        <a href="../index.html#experiencia">Experiência</a>
+        <a href="../index.html#projetos">Projetos</a>
+        <a href="../index.html#artigos">Artigos</a>
+        <a href="../index.html#contato">Contato</a>
+      </div>
+      <div class="footer-col">
+        <div class="stack-label">Social</div>
+        <a href="mailto:armelingu@gmail.com">E-mail</a>
+        <a href="https://github.com/armelingu" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/gustavoarmelin" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="../Curriculo_Gustavo_Armelin.pdf" target="_blank">Currículo</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="year"></span> Gustavo Armelin</span>
+    <a href="../index.html#top" class="back-top">Voltar ao topo ↑</a>
+  </div>
+</footer>
+
+<script src="../script.js"></script>
+</body>
+</html>
