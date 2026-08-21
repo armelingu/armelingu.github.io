@@ -254,9 +254,62 @@ section.body-section:last-of-type { border-bottom: none; }
 .article-card p { font-size: 14px; margin: 0; }
 
 /* Contact */
-.contact-block { background: var(--teal); color: var(--paper); border-radius: 20px; padding: 60px; text-align: center; border: 2.5px solid var(--ink); }
+.contact-block {
+  position: relative; overflow: hidden;
+  background: var(--teal); color: var(--paper); border-radius: 20px; padding: 60px;
+  text-align: center; border: 2.5px solid var(--ink);
+}
+.contact-copy { position: relative; z-index: 1; }
 .contact-block h2 { font-size: clamp(26px, 4vw, 38px); margin-bottom: 16px; }
 .contact-block p { max-width: 480px; margin: 0 auto 32px; font-size: 16.5px; }
+
+.contact-art { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.stamp {
+  position: absolute; border: 2.5px solid var(--ink); box-shadow: 5px 5px 0 var(--ink);
+}
+.stamp-sq {
+  top: 22px; left: 28px; width: 52px; height: 52px; background: var(--yellow);
+  animation: stamp-spin 16s linear infinite;
+}
+.stamp-dot {
+  bottom: 28px; right: 36px; width: 44px; height: 44px; border-radius: 50%; background: var(--coral);
+  animation: stamp-float 7s ease-in-out infinite;
+}
+.stamp-bar {
+  top: 36px; right: 56px; width: 72px; height: 16px; background: var(--blue); transform: rotate(18deg);
+  animation: stamp-wiggle 8s ease-in-out infinite;
+}
+.stamp-bubble {
+  bottom: 32px; left: 40px; width: 70px; height: 46px; background: var(--paper); border-radius: 12px;
+  animation: stamp-float 9s ease-in-out infinite reverse;
+}
+.stamp-bubble::after {
+  content: ''; position: absolute; left: 14px; bottom: -9px;
+  width: 16px; height: 16px; background: var(--paper); border-right: 2.5px solid var(--ink);
+  border-bottom: 2.5px solid var(--ink); transform: rotate(45deg);
+}
+.stamp-chip {
+  top: 50%; left: 18px; width: 22px; height: 22px; background: var(--yellow); transform: rotate(45deg);
+  animation: stamp-spin 22s linear infinite reverse;
+}
+
+@keyframes stamp-spin { to { transform: rotate(360deg); } }
+@keyframes stamp-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes stamp-wiggle {
+  0%, 100% { transform: rotate(18deg); }
+  50% { transform: rotate(-8deg); }
+}
+
+@media (max-width: 760px) {
+  .contact-block { padding: 48px 24px; }
+  .stamp-bar, .stamp-chip { display: none; }
+  .stamp-sq { width: 36px; height: 36px; top: 14px; left: 14px; }
+  .stamp-dot { width: 32px; height: 32px; bottom: 14px; right: 14px; }
+  .stamp-bubble { width: 52px; height: 36px; bottom: 16px; left: 16px; }
+}
 .contact-links { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
 .contact-links a {
   display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; text-decoration: none;
@@ -339,7 +392,7 @@ footer { background: var(--ink); color: var(--paper); padding: 36px 0 0; }
     transition-duration: 0.001ms !important;
   }
   html { scroll-behavior: auto; }
-  .marquee-track, .spin-shape { animation: none !important; }
+  .marquee-track, .spin-shape, .stamp { animation: none !important; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
     animation: none !important;
   }
